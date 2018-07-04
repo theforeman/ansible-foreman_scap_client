@@ -1,0 +1,14 @@
+---
+ensure: present
+server: ''
+port: ''
+policies: []
+ca_file: ''
+host_certificate: ''
+host_private_key: ''
+foreman_release: latest
+foreman_repo_url: 'http://yum.theforeman.org/plugins/{{ foreman_release }}/el7/x86_64'
+foreman_repo_state: absent
+foreman_repo_key: 'https://yum.theforeman.org/RPM-GPG-KEY-foreman'
+foreman_repo_gpg: no
+cron_template: 'templates/cron.j2'
