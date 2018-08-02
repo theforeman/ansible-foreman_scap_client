@@ -1,24 +1,20 @@
 ---
-- name: 'Configure gpg key'
-  when: "{{ forman_repo_gpg }}"
-
-
 - name: 'Configure plugins repository'
   yum_repository:
-    name: "Foreman plugins {{ foreman_repo_rel }}"
+    name: "Foreman plugins {{ foreman_scap_client_repo_rel }}"
     description: "Foreman plugins repository"
-    baseurl: "{{ foreman_repo_url }}"
-    gpgcheck: "{{ foreman_repo_gpg }}"
-    state: "{{ foreman_repo_state }}"
+    baseurl: "{{ foreman_scap_client_repo_url }}"
+    gpgcheck: "{{ foreman_scap_client_repo_gpg }}"
+    state: "{{ foreman_scap_client_repo_state }}"
 
 - name: 'Install the foreman_scap_client package'
   yum:
     name: "rubygem-foreman_scap_client"
-    state: "{{ ensure }}"
+    state: "{{ foreman_scap_client_ensure }}"
 
 - name: 'Create cron in /etc/cron.d/'
   template:
-    src: templates/cron.j2
+    src: "{{ foreman_scap_client_cron_template }}"
     dest: /etc/cron.d/foreman_scap_client_cron
     owner: root
 
