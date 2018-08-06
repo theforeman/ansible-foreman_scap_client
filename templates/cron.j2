@@ -3,10 +3,8 @@
 # ANY MANUAL CHANGES WILL BE LOST ON THE NEXT ANSIBLE EXECUTION
 #
 # Executing foreman_scap_client from command line may be useful for debugging purposes.
-# It may generate warnings due to a reference to a missing file.
-# Fetching files from remote sources is not yet supported by foreman_scap_client.
 
 # foreman_scap_client cron job
-{% for policy in policies %}
+{% for policy in foreman_scap_client_policies %}
 {{ policy['minute'] }} {{ policy['hour'] }} {{ policy['monthday'] }} {{ policy['month'] }} {{ policy['weekday'] }} root "/usr/bin/foreman_scap_client {{ policy['id'] }} > /dev/null"
 {% endfor %}
