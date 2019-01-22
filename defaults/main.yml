@@ -1,5 +1,5 @@
 ---
-foreman_scap_client_ensure: present
+foreman_scap_client_state: present
 foreman_scap_client_server: ''
 foreman_scap_client_port: ''
 foreman_scap_client_policies: []

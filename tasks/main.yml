@@ -5,12 +5,13 @@
     description: "Foreman plugins repository"
     baseurl: "{{ foreman_scap_client_repo_url }}"
     gpgcheck: "{{ foreman_scap_client_repo_gpg }}"
+    gpgkey: "{{ foreman_scap_client_repo_key }}"
     state: "{{ foreman_scap_client_repo_state }}"
 
 - name: 'Install the foreman_scap_client package'
   yum:
     name: "rubygem-foreman_scap_client"
-    state: "{{ foreman_scap_client_ensure }}"
+    state: "{{ foreman_scap_client_state }}"
 
 - name: 'Create cron in /etc/cron.d/'
   template:
@@ -23,3 +24,11 @@
     src: templates/config.yaml.j2
     dest: /etc/foreman_scap_client/config.yaml
     owner: root
+
+- name: "Ensure cron and config are {{ foreman_scap_client_state }}"
+  file:
+    path: "{{ item }}"
+    state: "{{ absent if foreman_scap_client_state == absent else file }}"
+  with_items:
+    - /etc/cron.d/foreman_scap_client_cron
+    - /etc/foreman_scap_client/config.yaml
