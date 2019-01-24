@@ -1,0 +1,19 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: foreman_scap_client
+  author: oprazak
+  description: Installs and configures foreman_scap_client
+  license: GPL-2.0
+  company: theforeman.org
+  min_ansible_version: 2.6
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+  galaxy_tags:
+    - rhel
+    - centos
+    - openscap
