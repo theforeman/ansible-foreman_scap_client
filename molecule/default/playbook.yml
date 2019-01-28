@@ -1,5 +1,29 @@
 ---
 - name: Converge
   hosts: all
+  pre_tasks:
+    - name: 'Install cronie'
+      yum:
+        name: cronie
+        state: present
   roles:
-    - role: foreman_scap_client
+    - role: ansible-foreman_scap_client
+  vars:
+    foreman_scap_client_repo_state: present
+    foreman_scap_client_server: https://foreman.example.com
+    foreman_scap_client_port: 9090
+    foreman_scap_client_policies: [
+      {
+        "id": "1",
+        "hour": "12",
+        "minute": "1",
+        "month": "*",
+        "monthday": "*",
+        "weekday": "1",
+        "profile_id": "",
+        "content_path": "/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml",
+        "download_path": "/compliance/policies/1/content",
+        "tailoring_path": "/var/lib/openscap/ssg-fedora-ds-tailored.xml",
+        "tailoring_download_path": "/compliance/policies/1/tailoring"
+      }
+    ]
