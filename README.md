@@ -23,6 +23,7 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_repo_url': URL for the repository with rubygem-foreman_scap_client
 * 'foreman_scap_client_repo_gpg': Enable / disable GPG checks
 * 'foreman_scap_client_repo_state': state of the repository
+* 'foreman_scap_client_cron_template': path to the cron template
 
 ### Sample Usage
 
@@ -59,6 +60,20 @@ just pass empty string to "tailoring_path".
 When using this module together with [foreman_openscap](https://theforeman.org/plugins/foreman_openscap/), no further configuration
  should be necessary as values are by Foreman's ENC. However, verify the values for server, port and policies after
  importing the class; the policies should be `<%= @host.policies_enc %>`
+
+### Testing
+Tests are set up to run in Docker using Molecule and Testinfra. Make sure to install dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+Check if your current user is able to connect to Docker without sudo. If not, create docker group and add your user. To run tests:
+
+```
+molecule test
+```
+
 
 ### Releasing on ansible-galaxy
 
