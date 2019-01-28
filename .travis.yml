@@ -5,7 +5,6 @@ services:
   - docker
 before_install:
   - sudo apt-get -qq update
-  - pip install molecule
-  - pip install docker
+  - pip install -r requirements.txt
 script:
   - molecule test

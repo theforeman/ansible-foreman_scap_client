@@ -1,4 +1,4 @@
-# Ansible role for Foreman SCAP client
+# Ansible role for Foreman SCAP client [![Build Status](https://travis-ci.org/xprazak2/ansible-foreman_scap_client.svg?branch=master)](https://travis-ci.org/xprazak2/ansible-foreman_scap_client)
 
 Ansible role for Foreman SCAP client configures foreman_scap_client
 to run scans and upload results to foreman proxy.
