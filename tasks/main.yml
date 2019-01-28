@@ -28,7 +28,7 @@
 - name: "Ensure cron and config are {{ foreman_scap_client_state }}"
   file:
     path: "{{ item }}"
-    state: "{{ absent if foreman_scap_client_state == absent else file }}"
+    state: "{{ 'absent' if foreman_scap_client_state == 'absent' else 'file' }}"
   with_items:
     - /etc/cron.d/foreman_scap_client_cron
     - /etc/foreman_scap_client/config.yaml
