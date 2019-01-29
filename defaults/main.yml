@@ -12,3 +12,5 @@ foreman_scap_client_repo_state: absent
 foreman_scap_client_repo_key: 'https://yum.theforeman.org/RPM-GPG-KEY-foreman'
 foreman_scap_client_repo_gpg: false
 foreman_scap_client_cron_template: 'templates/cron.j2'
+foreman_scap_client_cron_splay_seed: ''
+foreman_scap_client_cron_splay: 600

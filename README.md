@@ -24,6 +24,8 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_repo_gpg': Enable / disable GPG checks
 * 'foreman_scap_client_repo_state': state of the repository
 * 'foreman_scap_client_cron_template': path to the cron template
+* 'foreman_scap_client_cron_splay': upper limit for cron tasks splay time
+* 'foreman_scap_client_cron_splay_seed': seed for cron task splay time to generate random but idempotent numbers
 
 ### Sample Usage
 
@@ -57,9 +59,9 @@ just pass empty string to "tailoring_path".
 
 ### Usage with foreman_openscap
 
-When using this module together with [foreman_openscap](https://theforeman.org/plugins/foreman_openscap/), no further configuration
- should be necessary as values are by Foreman's ENC. However, verify the values for server, port and policies after
- importing the class; the policies should be `<%= @host.policies_enc %>`
+When using this role together with [foreman_openscap](https://theforeman.org/plugins/foreman_openscap/), no further configuration
+ should be necessary as values come from Foreman's ENC. However, verify the values for server, port and policies after
+ importing the role; they should have overrides enabled and the policies should be `<%= @host.policies_enc %>`
 
 ### Testing
 Tests are set up to run in Docker using Molecule and Testinfra. Make sure to install dependencies:

@@ -1,5 +1,6 @@
 import os
 import yaml
+import re
 
 import testinfra.utils.ansible_runner
 
@@ -40,5 +41,7 @@ def test_foreman_scap_client_cron(host):
     cron = host.file(file_path).content_string
 
     assert file.exists
-    assert (cron.split('\n')[-1] ==
-            '1 12 * * 1 root "/usr/bin/foreman_scap_client 1 > /dev/null"')
+    assert re.match(
+        r'1 12 \* \* 1 root "/bin/sleep \d+; /usr/bin/foreman_scap_client 1 > /dev/null"',
+        cron.split('\n')[-1]
+    )
