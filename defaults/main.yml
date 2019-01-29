@@ -3,9 +3,9 @@ foreman_scap_client_state: present
 foreman_scap_client_server: ''
 foreman_scap_client_port: ''
 foreman_scap_client_policies: []
-foreman_scap_client_ca_file: ''
-foreman_scap_client_host_certificate: ''
-foreman_scap_client_host_private_key: ''
+foreman_scap_client_ca_cert_path: ''
+foreman_scap_client_host_cert_path: ''
+foreman_scap_client_host_private_key_path: ''
 foreman_scap_client_release: latest
 foreman_scap_client_repo_url: 'https://yum.theforeman.org/plugins/{{ foreman_scap_client_release }}/el7/x86_64'
 foreman_scap_client_repo_state: absent

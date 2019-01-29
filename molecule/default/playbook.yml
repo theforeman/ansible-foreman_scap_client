@@ -6,6 +6,10 @@
       yum:
         name: cronie
         state: present
+    - name: 'Install subscription-manager'
+      yum:
+        name: subscription-manager
+        state: present
   roles:
     - role: ansible-foreman_scap_client
   vars:

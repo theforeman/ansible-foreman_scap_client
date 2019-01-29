@@ -32,16 +32,27 @@ def test_foreman_scap_client_config(host):
             "/var/lib/openscap/ssg-fedora-ds-tailored.xml")
     assert (config[1][":tailoring_download_path"] ==
             "/compliance/policies/1/tailoring")
+    assert config[':ca_file'] == '/etc/rhsm/ca/redhat-uep.pem'
+    assert config[':host_certificate'] == '/etc/pki/consumer/cert.pem'
+    assert config[':host_private_key'] == '/etc/pki/consumer/key.pem'
 
 
 def test_foreman_scap_client_cron(host):
     file_path = '/etc/cron.d/foreman_scap_client_cron'
     file = host.file(file_path)
 
+    assert file.exists
+
     cron = host.file(file_path).content_string
 
-    assert file.exists
     assert re.match(
         r'1 12 \* \* 1 root "/bin/sleep \d+; /usr/bin/foreman_scap_client 1 > /dev/null"',
         cron.split('\n')[-1]
     )
+
+
+def test_foreman_scap_client_facts(host):
+    file_path = '/etc/ansible/facts.d/foreman_scap_client.fact'
+
+    file = host.file(file_path)
+    assert file.exists

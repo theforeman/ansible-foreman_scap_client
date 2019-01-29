@@ -13,6 +13,20 @@
     name: "rubygem-foreman_scap_client"
     state: "{{ foreman_scap_client_state }}"
 
+- name: 'Create facts dir'
+  file:
+    path: /etc/ansible/facts.d
+    state: directory
+
+- name: 'Create custom facts file'
+  copy:
+    src: foreman_scap_client_facts.rb
+    dest: /etc/ansible/facts.d/foreman_scap_client.fact
+    mode: 0755
+
+- name: 'Re-run setup to use custom facts'
+  setup: ~
+
 - name: 'Create cron in /etc/cron.d/'
   template:
     src: "{{ foreman_scap_client_cron_template }}"

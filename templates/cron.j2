@@ -6,5 +6,5 @@
 
 # foreman_scap_client cron job
 {% for policy in foreman_scap_client_policies %}
-{{ policy['minute'] }} {{ policy['hour'] }} {{ policy['monthday'] }} {{ policy['month'] }} {{ policy['weekday'] }} root "/bin/sleep {{ foreman_scap_client_cron_splay | random(seed = foreman_scap_client_cron_splay_seed) if foreman_scap_client_cron_splay_seed != '' else random }}; /usr/bin/foreman_scap_client {{ policy['id'] }} > /dev/null"
+{{ policy['minute'] }} {{ policy['hour'] }} {{ policy['monthday'] }} {{ policy['month'] }} {{ policy['weekday'] }} root "/bin/sleep {{ foreman_scap_client_cron_splay | random(seed = foreman_scap_client_cron_splay_seed) if foreman_scap_client_cron_splay_seed != '' else foreman_scap_client_cron_splay | random }}; /usr/bin/foreman_scap_client {{ policy['id'] }} > /dev/null"
 {% endfor %}

@@ -9,30 +9,31 @@ This role will automatically install foreman_scap_client (if not installed),
 it will configure /etc/foreman_scap_client/config.yaml with parameters which are needed for the operation
 of foreman_scap_client and create a cron which schedules the client execution.
 
-### Parameters
+### Variables
 
+* 'foreman_scap_client_state': state of the rubygem-foreman_scap_client package
 * 'foreman_scap_client_server': configures the proxy server
 * 'foreman_scap_client_port': configures the proxy server's port
-* 'foreman_scap_client_ca_file': path to file of certification authority that issued client's certificate
-* 'foreman_scap_client_host_certificate': path to host certificate, may be puppet agent certificate or katello certificate
-* 'foreman_scap_client_host_private_key': path to host private key, may be puppet agent private key or katello private key
 * 'foreman_scap_client_policies': Array of policies that should be configured
+* 'foreman_scap_client_ca_cert_path': path to file of certification authority that issued client's certificate
+* 'foreman_scap_client_host_cert_path': path to host certificate, may be puppet agent certificate or katello certificate
+* 'foreman_scap_client_host_private_key_path': path to host private key, may be puppet agent private key or katello private key
 * 'foreman_scap_client_release': Which release to configure a repo for
+* 'foreman_scap_client_repo_url': URL for the repository with rubygem-foreman_scap_client
+* 'foreman_scap_client_repo_state': state of the repository
 * 'foreman_scap_client_repo_key': RPM Key source file for foreman-plugins repo. Note: Currently, packages are not signed.
   Unless set to an alternative file source, URL will be used.
-* 'foreman_scap_client_repo_url': URL for the repository with rubygem-foreman_scap_client
 * 'foreman_scap_client_repo_gpg': Enable / disable GPG checks
-* 'foreman_scap_client_repo_state': state of the repository
 * 'foreman_scap_client_cron_template': path to the cron template
-* 'foreman_scap_client_cron_splay': upper limit for cron tasks splay time
 * 'foreman_scap_client_cron_splay_seed': seed for cron task splay time to generate random but idempotent numbers
+* 'foreman_scap_client_cron_splay': upper limit for cron tasks splay time
 
 ### Sample Usage
 
 The following example ensures that every week an SCAP audit is executed and the results
-are sent to proxy at proxy.example.com. The example will automatically attempt to install
+are sent to proxy at proxy.example.com:9090. The example will automatically attempt to install
 foreman_scap_client on the system. If you do not wish to use your tailoring file with policy,
-just pass empty string to "tailoring_path".
+just pass empty strings to tailoring variables.
 
 ```ansible
 ---
@@ -41,6 +42,8 @@ just pass empty string to "tailoring_path".
   roles:
     - foreman_scap_client
   vars:
+    foreman_scap_client_server: https://proxy.example.com
+    foreman_scap_client_port: 9090
     foreman_scap_client_policies: [{
       "id": "1",
       "hour": "12",
