@@ -3,7 +3,7 @@ dependencies: []
 
 galaxy_info:
   role_name: foreman_scap_client
-  author: oprazak
+  author: theforeman
   description: Installs and configures foreman_scap_client
   license: GPL-2.0
   company: theforeman.org
