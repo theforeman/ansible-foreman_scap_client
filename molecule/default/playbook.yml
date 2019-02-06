@@ -17,6 +17,9 @@
     foreman_scap_client_server: https://foreman.example.com
     foreman_scap_client_port: 9090
     foreman_scap_client_cron_splay_seed: 42
+    foreman_scap_client_http_proxy_server: 'https://proxy.example.com'
+    foreman_scap_client_http_proxy_port: 7475
+    foreman_scap_client_fetch_remote_resources: true
     foreman_scap_client_policies: [
       {
         "id": "1",

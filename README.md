@@ -27,6 +27,9 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_cron_template': path to the cron template
 * 'foreman_scap_client_cron_splay_seed': seed for cron task splay time to generate random but idempotent numbers
 * 'foreman_scap_client_cron_splay': upper limit for cron tasks splay time
+* 'foreman_scap_client_fetch_remote_resources': Whether to fetch referenced resources from remote location
+* 'foreman_scap_client_http_proxy_server': HTTP proxy server
+* 'foreman_scap_client_http_proxy_port': HTTP proxy port
 
 ### Sample Usage
 

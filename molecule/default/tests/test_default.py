@@ -22,6 +22,10 @@ def test_foreman_scap_client_config(host):
 
     assert config[":port"] == 9090
     assert config[":server"] == 'https://foreman.example.com'
+
+    assert config[':fetch_remote_resources']
+    assert config[':http_proxy_server'] == 'https://proxy.example.com'
+    assert config[':http_proxy_port'] == 7475
     assert (config[1][":profile"] is None)
 
     assert (config[1][":content_path"] ==
