@@ -1,4 +1,4 @@
-# Ansible role for Foreman SCAP client [![Build Status](https://travis-ci.org/xprazak2/ansible-foreman_scap_client.svg?branch=master)](https://travis-ci.org/xprazak2/ansible-foreman_scap_client)
+# Ansible role for Foreman SCAP client [![Build Status](https://travis-ci.org/theforeman/ansible-foreman_scap_client.svg?branch=master)](https://travis-ci.org/theforeman/ansible-foreman_scap_client)
 
 Ansible role for Foreman SCAP client configures foreman_scap_client
 to run scans and upload results to foreman proxy.
@@ -85,4 +85,4 @@ molecule test
 
 ### Releasing on ansible-galaxy
 
-TODO
+Galaxy imports content from GitHub and uses git tags for [versioning](https://galaxy.ansible.com/docs/contributing/version.html). Galaxy expects tags to have semantic version format.
