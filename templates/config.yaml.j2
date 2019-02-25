@@ -7,7 +7,7 @@
 :port: {{ foreman_scap_client_port }}
 
 # Should --fetch-remote-resources be added to `oscap xccdf eval` command
-:fetch_remote_resources: {{ foreman_scap_client_fetch_remote_resources }}
+:fetch_remote_resources: {{ foreman_scap_client_fetch_remote_resources | lower }}
 
 # HTTP proxy server for downloading remote resources
 :http_proxy_server: {{ foreman_scap_client_http_proxy_server }}
@@ -17,15 +17,15 @@
 # Client CA file.
 # It could be any valid certificate that is accepted by foreman-proxy, such as Puppet CA certificate (e.g., '/var/lib/puppet/ssl/certs/ca.pem')
 # Or (recommended for client reporting to Katello) subscription manager CA file, (e.g., '/etc/rhsm/ca/katello-server-ca.pem')
-:ca_file: {{ foreman_scap_client_ca_cert_path if foreman_scap_client_ca_cert_path != '' else ansible_local['foreman_scap_client'].get('rh_ca_cert_path') }}
+:ca_file: {{ foreman_scap_client_ca_cert_path if foreman_scap_client_ca_cert_path != '' else rh_ca_cert_path }}
 # Client host certificate.
 # It could be Puppet agent host certificate (e.g., '/var/lib/puppet/ssl/certs/myhost.example.com.pem')
 # Or (recommended for client reporting to Katello) consumer certificate (e.g., '/etc/pki/consumer/cert.pem')
-:host_certificate: {{ foreman_scap_client_host_cert_path if foreman_scap_client_host_cert_path != '' else ansible_local['foreman_scap_client'].get('rh_consumer_cert_path') }}
+:host_certificate: {{ foreman_scap_client_host_cert_path if foreman_scap_client_host_cert_path != '' else rh_consumer_cert_path }}
 # Client private key
 # It could be Puppet agent private key (e.g., '/var/lib/puppet/ssl/private_keys/myhost.example.com.pem')
 # Or (recommended for client reporting to Katello) consumer private key (e.g., '/etc/pki/consumer/key.pem')
-:host_private_key: {{ foreman_scap_client_host_private_key_path if foreman_scap_client_host_private_key_path != '' else ansible_local['foreman_scap_client'].get('rh_consumer_private_key_path') }}
+:host_private_key: {{ foreman_scap_client_host_private_key_path if foreman_scap_client_host_private_key_path != '' else rh_consumer_private_key_path }}
 
 # policy (key is id as in Foreman)
 {% for policy in foreman_scap_client_policies %}
