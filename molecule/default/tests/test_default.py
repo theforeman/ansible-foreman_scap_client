@@ -17,13 +17,13 @@ def test_foreman_scap_client_config(host):
     file = host.file(file_path)
 
     assert file.exists
+    assert file.contains(':fetch_remote_resources: true')
 
-    config = yaml.load(host.file(file_path).content_string)
+    config = yaml.load(file.content_string)
 
     assert config[":port"] == 9090
     assert config[":server"] == 'https://foreman.example.com'
 
-    assert config[':fetch_remote_resources']
     assert config[':http_proxy_server'] == 'https://proxy.example.com'
     assert config[':http_proxy_port'] == 7475
     assert (config[1][":profile"] is None)
@@ -47,16 +47,9 @@ def test_foreman_scap_client_cron(host):
 
     assert file.exists
 
-    cron = host.file(file_path).content_string
+    cron = file.content_string
 
     assert re.match(
         r'1 12 \* \* 1 root "/bin/sleep \d+; /usr/bin/foreman_scap_client 1 > /dev/null"',
         cron.split('\n')[-1]
     )
-
-
-def test_foreman_scap_client_facts(host):
-    file_path = '/etc/ansible/facts.d/foreman_scap_client.fact'
-
-    file = host.file(file_path)
-    assert file.exists
