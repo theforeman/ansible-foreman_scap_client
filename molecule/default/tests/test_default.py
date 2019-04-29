@@ -23,6 +23,7 @@ def test_foreman_scap_client_config(host):
 
     assert config[":port"] == 9090
     assert config[":server"] == 'https://foreman.example.com'
+    assert config[":timeout"] == 61
 
     assert config[':http_proxy_server'] == 'https://proxy.example.com'
     assert config[':http_proxy_port'] == 7475

@@ -20,6 +20,7 @@
     foreman_scap_client_http_proxy_server: 'https://proxy.example.com'
     foreman_scap_client_http_proxy_port: 7475
     foreman_scap_client_fetch_remote_resources: true
+    foreman_scap_client_timeout: 61
     foreman_scap_client_policies: [
       {
         "id": "1",
