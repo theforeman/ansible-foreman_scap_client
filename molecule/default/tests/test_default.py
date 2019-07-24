@@ -50,6 +50,6 @@ def test_foreman_scap_client_cron(host):
     cron = file.content_string
 
     assert re.match(
-        r'1 12 \* \* 1 root "/bin/sleep \d+; /usr/bin/foreman_scap_client 1 > /dev/null"',
+        r'1 12 \* \* 1 root /bin/sleep \d+; /usr/bin/foreman_scap_client 1 2>&1 | logger -t foreman_scap_client',
         cron.split('\n')[-1]
     )
