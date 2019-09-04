@@ -43,7 +43,7 @@ just pass empty strings to tailoring variables.
 - hosts: all
   become: true
   roles:
-    - foreman_scap_client
+    - theforeman.foreman_scap_client
   vars:
     foreman_scap_client_server: https://proxy.example.com
     foreman_scap_client_port: 9090
