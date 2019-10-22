@@ -57,7 +57,7 @@ testinfra==1.16.0
 toml==0.10.0
 tox==3.7.0
 tree-format==0.1.2
-urllib3==1.24.1
+urllib3==1.24.2
 virtualenv==16.2.0
 websocket-client==0.54.0
 whichcraft==0.5.2
