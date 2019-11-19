@@ -17,3 +17,4 @@ foreman_scap_client_cron_splay: 600
 foreman_scap_client_fetch_remote_resources: false
 foreman_scap_client_http_proxy_server: ''
 foreman_scap_client_http_proxy_port: ''
+foreman_scap_client_timeout: 60
