@@ -1,7 +1,7 @@
 ---
 foreman_scap_client_state: present
 foreman_scap_client_server: ''
-foreman_scap_client_port: ''
+foreman_scap_client_port: 9090
 foreman_scap_client_policies: []
 foreman_scap_client_ca_cert_path: ''
 foreman_scap_client_host_cert_path: ''
