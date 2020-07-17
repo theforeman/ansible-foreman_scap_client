@@ -30,6 +30,7 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_fetch_remote_resources': Whether to fetch referenced resources from remote location
 * 'foreman_scap_client_http_proxy_server': HTTP proxy server
 * 'foreman_scap_client_http_proxy_port': HTTP proxy port
+* 'foreman_scap_client_ciphers': Optional list of ciphers for connection negotiation. Example: ["AES256-SHA:AES128-SHA:DES-CBC3-SHA"]
 
 ### Sample Usage
 

@@ -9,6 +9,11 @@
 # Timeout for sending reports to proxy
 :timeout: {{ foreman_scap_client_timeout }}
 
+{% if foreman_scap_client_ciphers | length > 0 %}
+# Ciphers used when negotiating connection with scap server
+:ciphers: {{ foreman_scap_client_ciphers | to_json }}
+{% endif %}
+
 # Should --fetch-remote-resources be added to `oscap xccdf eval` command
 :fetch_remote_resources: {{ foreman_scap_client_fetch_remote_resources | lower }}
 
