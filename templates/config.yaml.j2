@@ -9,7 +9,7 @@
 # Timeout for sending reports to proxy
 :timeout: {{ foreman_scap_client_timeout }}
 
-{% if foreman_scap_client_ciphers != '' %}
+{% if foreman_scap_client_ciphers | length > 0 %}
 # Ciphers used when negotiating connection with scap server
 :ciphers: {{ foreman_scap_client_ciphers }}
 {% endif %}
