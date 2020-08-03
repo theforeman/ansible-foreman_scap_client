@@ -1,5 +1,5 @@
 ---
-- name: 'Configure plugins repository'
+- name: Configure plugins repository
   yum_repository:
     name: "foreman-plugins-{{ foreman_scap_client_release }}"
     description: "Foreman plugins repository"
@@ -8,35 +8,37 @@
     gpgkey: "{{ foreman_scap_client_repo_key }}"
     state: "{{ foreman_scap_client_repo_state }}"
 
-- name: 'Install the foreman_scap_client package'
+- name: Install the foreman_scap_client package
   yum:
     name: "rubygem-foreman_scap_client"
     state: "{{ foreman_scap_client_state }}"
 
-- name: 'Get certificate paths'
-  script: foreman_scap_client_facts.rb
+- name: Get certificate paths
+  script: foreman_scap_client_facts.py
+  args:
+    executable: "{{ '/usr/libexec/platform-python' if ansible_distribution_major_version == '8' else 'python' }}"
   changed_when: false
   register: rh_certs
 
-- name: 'Set facts for rh certs'
+- name: Set facts for rh certs
   set_fact:
     rh_ca_cert_path: "{{ (rh_certs.stdout | from_json).get('rh_ca_cert_path') }}"
     rh_consumer_cert_path: "{{ (rh_certs.stdout | from_json).get('rh_consumer_cert_path') }}"
-    rh_consumer_private_key_path: "{{ (rh_certs.stdout | from_json).get('rh_consumer_private_key_path')  }}"
+    rh_consumer_private_key_path: "{{ (rh_certs.stdout | from_json).get('rh_consumer_key_path') }}"
 
-- name: 'Create cron in /etc/cron.d/'
+- name: Create cron in /etc/cron.d/
   template:
     src: "{{ foreman_scap_client_cron_template }}"
     dest: /etc/cron.d/foreman_scap_client_cron
     owner: root
 
-- name: 'Create config.yaml in /etc/foreman_scap_client'
+- name: Create config.yaml in /etc/foreman_scap_client
   template:
     src: templates/config.yaml.j2
     dest: /etc/foreman_scap_client/config.yaml
     owner: root
 
-- name: "Ensure cron and config are {{ foreman_scap_client_state }}"
+- name: Ensure cron and config are {{ foreman_scap_client_state }}
   file:
     path: "{{ item }}"
     state: "{{ 'absent' if foreman_scap_client_state == 'absent' else 'file' }}"
