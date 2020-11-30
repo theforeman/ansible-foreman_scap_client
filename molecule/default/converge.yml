@@ -11,7 +11,7 @@
         name: subscription-manager
         state: present
   roles:
-    - role: ansible-foreman_scap_client
+    - role: theforeman.foreman_scap_client
   vars:
     foreman_scap_client_repo_state: present
     foreman_scap_client_server: https://foreman.example.com
