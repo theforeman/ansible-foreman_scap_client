@@ -3,10 +3,6 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: molecule/default/yaml-lint.yml
 platforms:
   - name: instance
     image: geerlingguy/docker-centos7-ansible:latest
@@ -15,8 +11,6 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
 scenario:
   name: default
 verifier:
