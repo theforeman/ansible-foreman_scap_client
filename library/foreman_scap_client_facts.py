@@ -1,13 +1,11 @@
 #!/usr/bin/python
-"""
-Script to print RHSM certificates as JSON output
-"""
 
 import json
 try:
     from ConfigParser import SafeConfigParser
 except ImportError:
     from configparser import ConfigParser as SafeConfigParser
+from ansible.module_utils.basic import AnsibleModule
 
 def subscription_manager_cert_paths():
     """
@@ -26,4 +24,15 @@ def subscription_manager_cert_paths():
         pass
     return json.dumps(certs)
 
-print(subscription_manager_cert_paths())
+def main():
+    module_args = dict()
+    module = AnsibleModule(
+        argument_spec=module_args,
+        supports_check_mode=False,
+    )
+
+    results = subscription_manager_cert_paths()
+    module.exit_json(changed=False, paths=results)
+
+if __name__ == '__main__':
+    main()

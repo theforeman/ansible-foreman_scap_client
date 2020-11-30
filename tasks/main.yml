@@ -14,17 +14,15 @@
     state: "{{ foreman_scap_client_state }}"
 
 - name: Get certificate paths
-  script: foreman_scap_client_facts.py
-  args:
-    executable: "{{ '/usr/libexec/platform-python' if ansible_distribution_major_version == '8' else 'python' }}"
+  foreman_scap_client_facts:
   changed_when: false
   register: rh_certs
 
 - name: Set facts for rh certs
   set_fact:
-    rh_ca_cert_path: "{{ (rh_certs.stdout | from_json).get('rh_ca_cert_path') }}"
-    rh_consumer_cert_path: "{{ (rh_certs.stdout | from_json).get('rh_consumer_cert_path') }}"
-    rh_consumer_private_key_path: "{{ (rh_certs.stdout | from_json).get('rh_consumer_key_path') }}"
+    rh_ca_cert_path: "{{ (rh_certs.paths | from_json).get('rh_ca_cert_path') }}"
+    rh_consumer_cert_path: "{{ (rh_certs.paths | from_json).get('rh_consumer_cert_path') }}"
+    rh_consumer_private_key_path: "{{ (rh_certs.paths | from_json).get('rh_consumer_key_path') }}"
 
 - name: Create cron in /etc/cron.d/
   template:
