@@ -19,7 +19,7 @@ def test_foreman_scap_client_config(host):
     assert file.exists
     assert file.contains(':fetch_remote_resources: true')
 
-    config = yaml.load(file.content_string)
+    config = yaml.safe_load(file.content_string)
 
     assert config[":port"] == 9090
     assert config[":server"] == 'https://foreman.example.com'
