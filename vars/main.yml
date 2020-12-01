@@ -1,0 +1,2 @@
+---
+foreman_scap_client_rhsm_config_file: /etc/rhsm/rhsm.conf

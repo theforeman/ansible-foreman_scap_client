@@ -13,18 +13,13 @@
     name: "rubygem-foreman_scap_client"
     state: "{{ foreman_scap_client_state }}"
 
-- name: Get certificate paths
-  script: foreman_scap_client_facts.py
-  args:
-    executable: "{{ '/usr/libexec/platform-python' if ansible_distribution_major_version == '8' else 'python' }}"
-  changed_when: false
-  register: rh_certs
-
 - name: Set facts for rh certs
   set_fact:
-    rh_ca_cert_path: "{{ (rh_certs.stdout | from_json).get('rh_ca_cert_path') }}"
-    rh_consumer_cert_path: "{{ (rh_certs.stdout | from_json).get('rh_consumer_cert_path') }}"
-    rh_consumer_private_key_path: "{{ (rh_certs.stdout | from_json).get('rh_consumer_key_path') }}"
+    rh_ca_cert_path: "{{ lookup('ini', 'repo_ca_cert section=rhsm file={{ config_file }}') }}"
+    rh_consumer_cert_path: "{{ lookup('ini', 'consumercertdir section=rhsm file={{ config_file }}') }}/cert.pem"
+    rh_consumer_private_key_path: "{{ lookup('ini', 'consumercertdir section=rhsm file={{ config_file }}') }}/key.pem"
+  vars:
+    config_file: "{{ foreman_scap_client_rhsm_config_file }}"
 
 - name: Create cron in /etc/cron.d/
   template:
