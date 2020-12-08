@@ -31,17 +31,24 @@
     src: "{{ foreman_scap_client_cron_template }}"
     dest: /etc/cron.d/foreman_scap_client_cron
     owner: root
+    group: root
+    mode: '0644'
 
 - name: Create config.yaml in /etc/foreman_scap_client
   template:
     src: templates/config.yaml.j2
     dest: /etc/foreman_scap_client/config.yaml
     owner: root
+    group: root
+    mode: '0644'
 
 - name: Ensure cron and config are {{ foreman_scap_client_state }}
   file:
     path: "{{ item }}"
     state: "{{ 'absent' if foreman_scap_client_state == 'absent' else 'file' }}"
+    owner: root
+    group: root
+    mode: '0644'
   with_items:
     - /etc/cron.d/foreman_scap_client_cron
     - /etc/foreman_scap_client/config.yaml
