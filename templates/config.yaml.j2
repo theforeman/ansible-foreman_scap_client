@@ -46,3 +46,11 @@
   :tailoring_path: {{ policy['tailoring_path'] }}
   :tailoring_download_path: {{ policy['tailoring_download_path'] }}
 {% endfor %}
+
+# OVAL policies
+:oval:
+{% for oval_policy in foreman_scap_client_oval_policies %}
+  {{ oval_policy['id'] }}:
+    :content_path: {{ oval_policy['oval_content_path'] }}
+    :download_path: {{ oval_policy['download_path'] }}
+{% endfor %}

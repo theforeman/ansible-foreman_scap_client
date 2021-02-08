@@ -36,3 +36,16 @@
         "tailoring_download_path": "/compliance/policies/1/tailoring"
       }
     ]
+    foreman_scap_client_oval_policies: [
+      {
+        "id": "3",
+        "hour": "5",
+        "minute": "7",
+        "month": "*",
+        "monthday": "*",
+        "weekday": "3",
+        "profile_id": "",
+        "oval_content_path": "/usr/share/xml/scap/ssg/fedora/ssg-fedora-oval.xml",
+        "download_path": "/compliance/oval_policies/3/content",
+      }
+    ]
