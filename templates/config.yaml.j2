@@ -37,12 +37,20 @@
 
 # policy (key is id as in Foreman)
 {% for policy in foreman_scap_client_policies %}
-{{ policy['id'] }}:
-  :profile: {{ policy['profile_id'] }}
-  :content_path: {{ policy['content_path']}}
+{{ policy.get('id') }}:
+{% if 'profile_id' in policy %}
+  :profile: {{ policy.get('profile_id') }}
+{% endif %}
+  :content_path: {{ policy.get('content_path')}}
   # Download path
   # A path to download SCAP content from proxy
-  :download_path: {{ policy['download_path'] }}
-  :tailoring_path: {{ policy['tailoring_path'] }}
-  :tailoring_download_path: {{ policy['tailoring_download_path'] }}
+{% if 'download_path' in policy %}
+  :download_path: {{ policy.get('download_path') }}
+{% endif %}
+{% if 'tailoring_path' in policy %}
+  :tailoring_path: {{ policy.get('tailoring_path') }}
+{% endif %}
+{% if 'tailoring_download_path' in policy %}
+  :tailoring_download_path: {{ policy.get('tailoring_download_path') }}
+{% endif %}
 {% endfor %}
