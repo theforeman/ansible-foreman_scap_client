@@ -12,6 +12,7 @@ of foreman_scap_client and create a cron which schedules the client execution.
 ### Variables
 
 * 'foreman_scap_client_state': state of the rubygem-foreman_scap_client package
+* 'foreman_scap_client_package': name of the package if it differs from the default (rubygem-foreman_scap_client for el7/suse or ruby-foreman-scap-client for debian/ubuntu)
 * 'foreman_scap_client_server': configures the proxy server
 * 'foreman_scap_client_port': configures the proxy server's port
 * 'foreman_scap_client_policies': Array of policies that should be configured
@@ -20,6 +21,7 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_host_private_key_path': path to host private key, may be puppet agent private key or katello private key
 * 'foreman_scap_client_release': Which release to configure a repo for
 * 'foreman_scap_client_repo_url': URL for the repository with rubygem-foreman_scap_client
+* 'foreman_scap_client_apt_repo_url: Debian-based repository providing the scap-client & subscription-manager
 * 'foreman_scap_client_repo_state': state of the repository
 * 'foreman_scap_client_repo_key': RPM Key source file for foreman-plugins repo. Note: Currently, packages are not signed.
   Unless set to an alternative file source, URL will be used.
