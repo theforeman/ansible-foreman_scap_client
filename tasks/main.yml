@@ -1,5 +1,5 @@
 ---
-- name: Configure plugins repository
+- name: Configure plugins repository (yum)
   yum_repository:
     name: "foreman-plugins-{{ foreman_scap_client_release }}"
     description: "Foreman plugins repository"
@@ -7,10 +7,31 @@
     gpgcheck: "{{ foreman_scap_client_repo_gpg }}"
     gpgkey: "{{ foreman_scap_client_repo_key }}"
     state: "{{ foreman_scap_client_repo_state }}"
+  when: ansible_os_family == "RedHat"
+
+- name: Configure plugins repository (apt)
+  apt_repository:
+    repo: "{{ foreman_scap_client_apt_repo_url }}"
+    state: "{{ foreman_scap_client_repo_state }}"
+  when: ansible_os_family == "Debian"
+
+- name: Set facts for deb-based OS
+  set_fact:
+    package_name: >
+      {{ (foreman_scap_client_package | length > 0)
+      | ternary(foreman_scap_client_package,'ruby-foreman-scap-client') }}
+  when: ansible_os_family == "Debian"
+
+- name: Set facts for rpm-based OS
+  set_fact:
+    package_name: >
+      {{ (foreman_scap_client_package | length > 0)
+      | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client') }}
+  when: ansible_os_family == "RedHat" or ansible_os_family == "Suse"
 
 - name: Install the foreman_scap_client package
-  yum:
-    name: "rubygem-foreman_scap_client"
+  package:
+    name: "{{ package_name }}"
     state: "{{ foreman_scap_client_state }}"
 
 - name: Get certificate paths

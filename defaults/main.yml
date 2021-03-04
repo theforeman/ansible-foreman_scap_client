@@ -1,5 +1,6 @@
 ---
 foreman_scap_client_state: present
+foreman_scap_client_package: ''
 foreman_scap_client_server: ''
 foreman_scap_client_port: 9090
 foreman_scap_client_policies: []
@@ -8,6 +9,7 @@ foreman_scap_client_host_cert_path: ''
 foreman_scap_client_host_private_key_path: ''
 foreman_scap_client_release: latest
 foreman_scap_client_repo_url: 'https://yum.theforeman.org/client/{{ foreman_scap_client_release }}/el7/x86_64'
+foreman_scap_client_apt_repo_url: 'deb [trusted=yes] https://apt.atix.de/Ubuntu20LTS/ stable main'
 foreman_scap_client_repo_state: absent
 foreman_scap_client_repo_key: 'https://yum.theforeman.org/RPM-GPG-KEY-foreman'
 foreman_scap_client_repo_gpg: false
