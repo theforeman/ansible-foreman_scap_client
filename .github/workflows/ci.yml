@@ -41,9 +41,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        distro: [centos7, centos8, ubuntu2004]
         include:
           - distro: centos7
+            command: molecule test
           - distro: centos8
+            command: molecule test
+          - distro: ubuntu2004
+            command: molecule test -s ubuntu
 
     steps:
       - name: Check out the codebase.
@@ -60,16 +65,10 @@ jobs:
         run: pip3 install -r requirements.txt
 
       - name: Run Molecule tests.
-        run: molecule test
+        run: ${{ matrix.command }}
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
 
-      - name: Run Molecule tests on ubuntu-scenario.
-        run: molecule test -s ubuntu
-        env:
-          PY_COLORS: '1'
-          ANSIBLE_FORCE_COLOR: '1'
-          MOLECULE_DISTRO: ${{ matrix.distro }}
 
