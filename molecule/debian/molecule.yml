@@ -4,8 +4,8 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance 
-    image: geerlingguy/docker-debian10-ansible:latest
+  - name: debian10
+    image: geerlingguy/docker-${MOLECULE_DISTRO:-debian10}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -14,7 +14,7 @@ platforms:
 provisioner:
   name: ansible
 scenario:
-  name: debian 
+  name: debian
 verifier:
   name: testinfra
   lint:
