@@ -12,7 +12,19 @@ galaxy_info:
       versions:
         - 6
         - 7
+    - name: Ubuntu
+      versions:
+        - 20.04
+    - name: Debian
+      versions:
+        - 10
+    - name: SLES
+      versions:
+        - 15
   galaxy_tags:
     - rhel
     - centos
+    - ubuntu
+    - debian
+    - sles
     - openscap
