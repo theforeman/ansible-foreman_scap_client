@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [centos7, centos8, ubuntu2004]
+        distro: [centos7, centos8, ubuntu2004, debian10]
         include:
           - distro: centos7
             command: molecule test
@@ -49,6 +49,8 @@ jobs:
             command: molecule test
           - distro: ubuntu2004
             command: molecule test -s ubuntu
+          - distro: debian10
+            command: molecule test -s debian
 
     steps:
       - name: Check out the codebase.

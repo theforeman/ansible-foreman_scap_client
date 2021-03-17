@@ -18,13 +18,9 @@ galaxy_info:
     - name: Debian
       versions:
         - 10
-    - name: SLES
-      versions:
-        - 15
   galaxy_tags:
     - rhel
     - centos
     - ubuntu
     - debian
-    - sles
     - openscap
