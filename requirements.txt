@@ -24,7 +24,7 @@ flake8==3.8.4
 google-auth==1.24.0
 idna==2.10
 iniconfig==1.1.1
-Jinja2==2.11.2
+Jinja2==2.11.3
 jinja2-time==0.2.0
 jmespath==0.10.0
 kubernetes==11.0.0
