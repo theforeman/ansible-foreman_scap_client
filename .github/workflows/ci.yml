@@ -13,7 +13,6 @@ defaults:
     working-directory: 'theforeman.foreman_scap_client'
 
 jobs:
-
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -29,12 +28,13 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install yamllint ansible-lint
+        run: pip3 install -r requirements.txt
 
-      - name: Lint code.
-        run: |
-          yamllint .
-          ansible-lint
+      - name: Run Ansible lint.
+        run: ansible-lint
+
+      - name: Run yaml lint
+        run: yamllint -f colored .
 
   molecule:
     name: Molecule
