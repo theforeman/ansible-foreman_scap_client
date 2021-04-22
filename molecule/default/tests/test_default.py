@@ -41,6 +41,9 @@ def test_foreman_scap_client_config(host):
     assert config[':host_certificate'] == '/etc/pki/consumer/cert.pem'
     assert config[':host_private_key'] == '/etc/pki/consumer/key.pem'
 
+    assert config[':oval'][3][':content_path'] == "/usr/share/xml/scap/ssg/fedora/ssg-fedora-oval.xml"
+    assert config[':oval'][3][':download_path'] == "/compliance/oval_policies/3/content"
+
 
 def test_foreman_scap_client_cron(host):
     file_path = '/etc/cron.d/foreman_scap_client_cron'
@@ -50,11 +53,18 @@ def test_foreman_scap_client_cron(host):
 
     cron = file.content_string
 
-    n = -1
-    if cron.split('\n')[n] == '':
-        n = -2
+    lines = list(filter(lambda line: line != '' and not line.startswith('#'), cron.split('\n')))
+
+    arf_line = next((item for item in list(lines) if 'ds' in item), None)
+    oval_line = next((item for item in list(lines) if 'oval' in item), None)
 
     assert re.match(
-        r'1 12 \* \* 1 root /bin/sleep \d+; /usr/bin/foreman_scap_client 1 2>&1 | logger -t foreman_scap_client',
-        cron.split('\n')[n]
+        r'1 12 \* \* 1 root /bin/sleep \d+; /usr/bin/foreman_scap_client ds 1 2>&1 | logger -t foreman_scap_client',
+        arf_line
     )
+
+    assert re.match(
+        r'7 5 \* \* 3 root /bin/sleep \d+; /usr/bin/foreman_scap_client oval 3 2>&1 | logger -t foreman_scap_client',
+        oval_line
+    )
+

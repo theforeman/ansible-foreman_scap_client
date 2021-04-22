@@ -6,5 +6,9 @@
 
 # foreman_scap_client cron job
 {% for policy in foreman_scap_client_policies %}
-{{ policy['minute'] }} {{ policy['hour'] }} {{ policy['monthday'] }} {{ policy['month'] }} {{ policy['weekday'] }} root /bin/sleep {{ foreman_scap_client_cron_splay | random(seed = foreman_scap_client_cron_splay_seed) if foreman_scap_client_cron_splay_seed != '' else foreman_scap_client_cron_splay | random }}; /usr/bin/foreman_scap_client {{ policy['id'] }} 2>&1 | logger -t foreman_scap_client
+{{ policy['minute'] }} {{ policy['hour'] }} {{ policy['monthday'] }} {{ policy['month'] }} {{ policy['weekday'] }} root /bin/sleep {{ foreman_scap_client_cron_splay | random(seed = foreman_scap_client_cron_splay_seed) if foreman_scap_client_cron_splay_seed != '' else foreman_scap_client_cron_splay | random }}; /usr/bin/foreman_scap_client ds {{ policy['id'] }} 2>&1 | logger -t foreman_scap_client
+{% endfor %}
+
+{% for oval_policy in foreman_scap_client_oval_policies %}
+{{ oval_policy['minute'] }} {{ oval_policy['hour'] }} {{ oval_policy['monthday'] }} {{ oval_policy['month'] }} {{ oval_policy['weekday'] }} root /bin/sleep {{ foreman_scap_client_cron_splay | random(seed = foreman_scap_client_cron_splay_seed) if foreman_scap_client_cron_splay_seed != '' else foreman_scap_client_cron_splay | random }}; /usr/bin/foreman_scap_client oval {{ oval_policy['id'] }} 2>&1 | logger -t foreman_scap_client
 {% endfor %}
