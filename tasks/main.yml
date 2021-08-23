@@ -17,14 +17,14 @@
 
 - name: Set facts for deb-based OS
   set_fact:
-    package_name: >
+    package_name: >-
       {{ (foreman_scap_client_package | length > 0)
       | ternary(foreman_scap_client_package,'ruby-foreman-scap-client') }}
   when: ansible_os_family == "Debian"
 
 - name: Set facts for rpm-based OS
   set_fact:
-    package_name: >
+    package_name: >-
       {{ (foreman_scap_client_package | length > 0)
       | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client') }}
   when: ansible_os_family == "RedHat" or ansible_os_family == "Suse"
