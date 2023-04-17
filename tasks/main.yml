@@ -5,8 +5,16 @@
     fail_msg: "The host does not have an OpenSCAP proxy assigned. Please assign an OpenSCAP proxy before continuing."
     success_msg: "The assigned OpenSCAP proxy is {{ foreman_scap_client_server }}."
 
-- name: Configure plugins repository (yum)
-  yum_repository:
+- name: Include OS specific vars
+  ansible.builtin.include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+    - '{{ ansible_distribution }}.yml'
+    - '{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml'
+    - '{{ ansible_os_family }}.yml'
+
+- name: Configure client repository (yum)
+  ansible.builtin.yum_repository:
     name: "foreman-plugins-{{ foreman_scap_client_release }}"
     description: "Foreman plugins repository"
     baseurl: "{{ foreman_scap_client_repo_url }}"
@@ -15,21 +23,51 @@
     state: "{{ foreman_scap_client_repo_state }}"
   when: ansible_os_family == "RedHat"
 
-- name: Configure plugins repository (apt)
-  apt_repository:
-    repo: "{{ foreman_scap_client_apt_repo_url }}"
-    state: "{{ foreman_scap_client_repo_state }}"
-  when: ansible_os_family == "Debian"
+- name: Configure client repository (apt) - sources.list format
+  block:
+    - name: Configure gpg_key for client repository (apt)
+      ansible.builtin.get_url:
+        url: "{{ foreman_scap_client_apt_key_url }}"
+        dest: "{{ foreman_scap_client_repo_key }}"
+
+    - name: Configure client repository (apt)
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by={{ foreman_scap_client_repo_key }}] {{ foreman_scap_client_apt_repo_url }} stable main"
+        state: "{{ foreman_scap_client_repo_state }}"
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version|int < 13) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int < 24)
+
+- name: Configure client repository (apt) - debian.sources format
+  block:
+    - name: Install python3-debian
+      ansible.builtin.package:
+        name: python3-debian
+        state: present
+
+    - name: Configure gpg_key for client repository (apt)
+      ansible.builtin.get_url:
+        url: "{{ foreman_scap_client_apt_key_url }}"
+        dest: "{{ foreman_scap_client_repo_key }}"
+
+    - name: Configure client repository (apt)
+      ansible.builtin.deb822_repository:
+        name: "foreman_client"
+        types: "deb"
+        uris: "{{ foreman_scap_client_apt_repo_url }}"
+        suites: "stable"
+        components: "main"
+        state: "{{ foreman_scap_client_repo_state }}"
+        signed_by: "{{ foreman_scap_client_repo_key }}"
+  when: (ansible_distribution == "Debian" and ansible_distribution_major_version|int >= 13) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 24)
 
 - name: Set facts for deb-based OS
-  set_fact:
+  ansible.builtin.set_fact:
     package_name: >-
       {{ (foreman_scap_client_package | length > 0)
       | ternary(foreman_scap_client_package,'ruby-foreman-scap-client') }}
   when: ansible_os_family == "Debian"
 
 - name: Set facts for rpm-based OS
-  set_fact:
+  ansible.builtin.set_fact:
     package_name: >-
       {{ (foreman_scap_client_package | length > 0)
       | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client') }}
@@ -73,13 +111,13 @@
   register: rh_certs
 
 - name: Set facts for rh certs
-  set_fact:
+  ansible.builtin.set_fact:
     rh_ca_cert_path: "{{ (rh_certs.paths | from_json).get('rh_ca_cert_path') }}"
     rh_consumer_cert_path: "{{ (rh_certs.paths | from_json).get('rh_consumer_cert_path') }}"
     rh_consumer_private_key_path: "{{ (rh_certs.paths | from_json).get('rh_consumer_key_path') }}"
 
 - name: Create cron in /etc/cron.d/
-  template:
+  ansible.builtin.template:
     src: "{{ foreman_scap_client_cron_template }}"
     dest: /etc/cron.d/foreman_scap_client_cron
     owner: root
@@ -88,7 +126,7 @@
   when: "foreman_scap_client_state != 'absent'"
 
 - name: Create config.yaml in /etc/foreman_scap_client
-  template:
+  ansible.builtin.template:
     src: templates/config.yaml.j2
     dest: /etc/foreman_scap_client/config.yaml
     owner: root
@@ -97,7 +135,7 @@
   when: "foreman_scap_client_state != 'absent'"
 
 - name: Ensure cron and config are {{ foreman_scap_client_state }}
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: "{{ 'absent' if foreman_scap_client_state == 'absent' else 'file' }}"
     owner: root
