@@ -22,12 +22,19 @@
       | ternary(foreman_scap_client_package,'ruby-foreman-scap-client') }}
   when: ansible_os_family == "Debian"
 
-- name: Set facts for rpm-based OS
+- name: Set facts for rpm-based OS for obsolete package
   set_fact:
     package_name: >-
       {{ (foreman_scap_client_package | length > 0)
       | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client') }}
-  when: ansible_os_family == "RedHat" or ansible_os_family == "Suse"
+  when: foreman_scap_client_obsolete and (ansible_os_family == "RedHat" or ansible_os_family == "Suse")
+
+- name: Set facts for rpm-based OS
+  set_fact:
+    package_name: >-
+      {{ (foreman_scap_client_package | length > 0)
+      | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client_bash') }}
+  when: (not foreman_scap_client_obsolete) and (ansible_os_family == "RedHat" or ansible_os_family == "Suse")
 
 - name: Install the foreman_scap_client package
   package:
@@ -53,13 +60,30 @@
     group: root
     mode: '0644'
 
-- name: Create config.yaml in /etc/foreman_scap_client
+- name: Create config.yaml in /etc/foreman_scap_client for obsolete package
   template:
     src: templates/config.yaml.j2
     dest: /etc/foreman_scap_client/config.yaml
     owner: root
     group: root
     mode: '0644'
+  when: foreman_scap_client_obsolete
+
+- name: Create config in /etc/foreman_scap_client
+  template:
+    src: templates/config.j2
+    dest: /etc/foreman_scap_client/config
+    owner: root
+    group: root
+    mode: '0644'
+  when: not foreman_scap_client_obsolete
+
+- name: Make a list of client files
+  set_fact:
+    scap_files:
+      - /etc/cron.d/foreman_scap_client_cron
+      - "{{ (foreman_scap_client_obsolete) | ternary('/etc/foreman_scap_client/config.yaml', '') }}"
+      - "{{ (foreman_scap_client_obsolete) | ternary('', '/etc/foreman_scap_client/config') }}"
 
 - name: Ensure cron and config are {{ foreman_scap_client_state }}
   file:
@@ -68,6 +92,5 @@
     owner: root
     group: root
     mode: '0644'
-  with_items:
-    - /etc/cron.d/foreman_scap_client_cron
-    - /etc/foreman_scap_client/config.yaml
+  with_items: "{{ scap_files|select|list }}"
+
