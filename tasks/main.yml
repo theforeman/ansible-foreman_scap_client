@@ -33,7 +33,7 @@
   set_fact:
     package_name: >-
       {{ (foreman_scap_client_package | length > 0)
-      | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client_bash') }}
+      | ternary(foreman_scap_client_package,'foreman_scap_client_bash') }}
   when: (not foreman_scap_client_obsolete) and (ansible_os_family == "RedHat" or ansible_os_family == "Suse")
 
 - name: Install the foreman_scap_client package
@@ -78,13 +78,6 @@
     mode: '0644'
   when: not foreman_scap_client_obsolete
 
-- name: Make a list of client files
-  set_fact:
-    scap_files:
-      - /etc/cron.d/foreman_scap_client_cron
-      - "{{ (foreman_scap_client_obsolete) | ternary('/etc/foreman_scap_client/config.yaml', '') }}"
-      - "{{ (foreman_scap_client_obsolete) | ternary('', '/etc/foreman_scap_client/config') }}"
-
 - name: Ensure cron and config are {{ foreman_scap_client_state }}
   file:
     path: "{{ item }}"
@@ -92,5 +85,6 @@
     owner: root
     group: root
     mode: '0644'
-  with_items: "{{ scap_files|select|list }}"
-
+  with_items:
+    - /etc/cron.d/foreman_scap_client_cron
+    - "{{ (foreman_scap_client_obsolete) | ternary('/etc/foreman_scap_client/config.yaml', '/etc/foreman_scap_client/config') }}"
