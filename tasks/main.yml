@@ -35,10 +35,37 @@
       | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client') }}
   when: ansible_os_family == "RedHat" or ansible_os_family == "Suse"
 
-- name: Install the foreman_scap_client package
+- name: Collect bootc status
+  shell:
+    cmd: 'bootc status --json'
+  register: bootc_status
+  ignore_errors: true
+  when: ansible_os_family == "RedHat"
+
+- name: Parse bootc status json
+  set_fact:
+    bootc_status_json: "{{ bootc_status.stdout | from_json }}"
+  when: 
+    - bootc_status.rc == 0
+    - bootc_status.stdout | length > 0
+
+- name: Determine host is a bootc host
+  set_fact:
+    is_bootc_host: "{{ bootc_status_json is defined and bootc_status_json['status']['booted'] | trim != 'None' }}"
+  when: ansible_os_family == "RedHat"
+
+- name: Install the foreman_scap_client package via dnf --transient (bootc hosts)
+  shell:
+    cmd: "dnf --transient install -y {{ package_name }}"
+  when:
+    - is_bootc_host is defined and is_bootc_host
+    - ansible_os_family == "RedHat"
+
+- name: Install the foreman_scap_client package (non-bootc hosts)
   package:
     name: "{{ package_name }}"
     state: "{{ foreman_scap_client_state }}"
+  when: is_bootc_host is not defined or not is_bootc_host
 
 - name: Get certificate paths
   foreman_scap_client_facts:
