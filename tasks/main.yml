@@ -45,7 +45,9 @@
       ansible.builtin.apt_repository:
         repo: "deb [signed-by={{ foreman_scap_client_repo_key }}] {{ foreman_scap_client_apt_repo_url }} stable main"
         state: "{{ foreman_scap_client_repo_state }}"
-  when: (ansible_distribution == "Debian" and ansible_distribution_major_version|int < 13) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int < 24)
+  when: >
+    (ansible_distribution == "Debian" and ansible_distribution_major_version|int < 13) or
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int < 24)
 
 - name: Configure client repository (apt) - debian.sources format
   block:
@@ -68,11 +70,12 @@
         components: "main"
         state: "{{ foreman_scap_client_repo_state }}"
         signed_by: "{{ foreman_scap_client_repo_key }}"
-  when: (ansible_distribution == "Debian" and ansible_distribution_major_version|int >= 13) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 24)
-  
+  when: >
+    (ansible_distribution == "Debian" and ansible_distribution_major_version|int >= 13) or
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 24)
 - name: Run apt-get update
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   when: ansible_os_family == "Debian"
 
 - name: Set facts for deb-based OS
@@ -99,7 +102,7 @@
 - name: Parse bootc status json
   set_fact:
     bootc_status_json: "{{ bootc_status.stdout | from_json }}"
-  when: 
+  when:
     - bootc_status.rc == 0
     - bootc_status.stdout | length > 0
 

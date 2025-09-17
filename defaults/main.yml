@@ -10,7 +10,8 @@ foreman_scap_client_host_private_key_path: ''
 foreman_scap_client_release: latest
 foreman_scap_client_repo_url: 'https://yum.theforeman.org/client/{{ foreman_scap_client_release }}/el7/x86_64'
 foreman_scap_client_apt_key_url: 'https://oss.atix.de/atix_gpg.pub'
-foreman_scap_client_apt_repo_url: 'https://oss.atix.de/{{ ansible_distribution }}{{ ansible_distribution_major_version }}/'
+foreman_scap_client_apt_repo_url: >-
+  https://oss.atix.de/{{ ansible_distribution }}{{ ansible_distribution_major_version }}/
 foreman_scap_client_repo_state: absent
 foreman_scap_client_repo_key: 'https://yum.theforeman.org/RPM-GPG-KEY-foreman'
 foreman_scap_client_repo_gpg: false
