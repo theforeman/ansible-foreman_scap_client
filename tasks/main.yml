@@ -75,6 +75,7 @@
         components: "main"
         state: "{{ foreman_scap_client_repo_state }}"
         signed_by: "{{ foreman_scap_client_repo_key }}"
+
 - name: Run apt-get update
   ansible.builtin.apt:
     update_cache: true
@@ -94,33 +95,32 @@
       | ternary(foreman_scap_client_package, 'rubygem-foreman_scap_client') }}
   when: ansible_os_family == "RedHat" or ansible_os_family == "Suse"
 
-- name: Collect bootc status
-  ansible.builtin.command:
-    cmd: bootc status --json
-  register: bootc_status
-  ignore_errors: true
-  changed_when: false
+- name: Check and install foreman_scap_client package for bootc hosts (RedHat only)
   when: ansible_os_family == "RedHat"
+  block:
+    - name: Collect bootc status
+      ansible.builtin.command:
+        cmd: bootc status --json
+      register: bootc_status
+      ignore_errors: true
+      changed_when: false
 
-- name: Parse bootc status json
-  ansible.builtin.set_fact:
-    bootc_status_json: "{{ bootc_status.stdout | from_json }}"
-  when:
-    - bootc_status.rc == 0
-    - bootc_status.stdout | length > 0
+    - name: Parse bootc status json
+      ansible.builtin.set_fact:
+        bootc_status_json: "{{ bootc_status.stdout | from_json }}"
+      when:
+        - bootc_status.rc == 0
+        - bootc_status.stdout | length > 0
 
-- name: Determine host is a bootc host
-  ansible.builtin.set_fact:
-    is_bootc_host: "{{ bootc_status_json is defined and bootc_status_json['status']['booted'] | trim != 'None' }}"
-  when: ansible_os_family == "RedHat"
+    - name: Determine host is a bootc host
+      ansible.builtin.set_fact:
+        is_bootc_host: "{{ bootc_status_json is defined and bootc_status_json['status']['booted'] | trim != 'None' }}"
 
-- name: Install the foreman_scap_client package via dnf --transient (bootc hosts)
-  ansible.builtin.command:
-    cmd: dnf --transient install -y {{ package_name }}
-  when:
-    - is_bootc_host is defined and is_bootc_host
-    - ansible_os_family == "RedHat"
-  changed_when: true
+    - name: Install the foreman_scap_client package via dnf --transient (bootc hosts)
+      ansible.builtin.command:
+        cmd: dnf --transient install -y {{ package_name }}
+      when: is_bootc_host is defined and is_bootc_host
+      changed_when: true
 
 - name: Install the foreman_scap_client package (non-bootc hosts)
   ansible.builtin.package:
