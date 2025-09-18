@@ -41,6 +41,7 @@ jobs:
     name: Molecule
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         distro: [centos8, ubuntu2404, debian13]
         include:
