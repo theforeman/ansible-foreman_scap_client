@@ -24,6 +24,7 @@
   when: ansible_os_family == "RedHat"
 
 - name: Configure client repository (zypper)
+  when: ansible_facts.os_family == "Suse"
   block:
     - name: Configure plugins repository (zypper)
       community.general.zypper_repository:
@@ -32,22 +33,27 @@
         repo: "{{ foreman_scap_client_repo_url }}"
         state: "{{ foreman_scap_client_repo_state }}"
         disable_gpg_check: '{{ foreman_scap_client_repo_gpg | ternary("false", "true") }}'
-  when: ansible_facts.os_family == "Suse"
 
 - name: Configure client repository (apt) - sources.list format
+  when: >
+    (ansible_distribution == "Debian" and ansible_distribution_major_version|int < 13) or
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int < 24)
   block:
     - name: Configure gpg_key for client repository (apt)
       ansible.builtin.get_url:
         url: "{{ foreman_scap_client_apt_key_url }}"
         dest: "{{ foreman_scap_client_repo_key }}"
+        mode: '0644'
 
     - name: Configure client repository (apt)
       ansible.builtin.apt_repository:
         repo: "deb [signed-by={{ foreman_scap_client_repo_key }}] {{ foreman_scap_client_apt_repo_url }} stable main"
         state: "{{ foreman_scap_client_repo_state }}"
-  when: (ansible_distribution == "Debian" and ansible_distribution_major_version|int < 13) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int < 24)
 
 - name: Configure client repository (apt) - debian.sources format
+  when: >
+    (ansible_distribution == "Debian" and ansible_distribution_major_version|int >= 13) or
+    (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 24)
   block:
     - name: Install python3-debian
       ansible.builtin.package:
@@ -58,6 +64,7 @@
       ansible.builtin.get_url:
         url: "{{ foreman_scap_client_apt_key_url }}"
         dest: "{{ foreman_scap_client_repo_key }}"
+        mode: '0644'
 
     - name: Configure client repository (apt)
       ansible.builtin.deb822_repository:
@@ -68,55 +75,55 @@
         components: "main"
         state: "{{ foreman_scap_client_repo_state }}"
         signed_by: "{{ foreman_scap_client_repo_key }}"
-  when: (ansible_distribution == "Debian" and ansible_distribution_major_version|int >= 13) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int >= 24)
-  
 - name: Run apt-get update
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   when: ansible_os_family == "Debian"
 
 - name: Set facts for deb-based OS
   ansible.builtin.set_fact:
     package_name: >-
       {{ (foreman_scap_client_package | length > 0)
-      | ternary(foreman_scap_client_package,'ruby-foreman-scap-client') }}
+      | ternary(foreman_scap_client_package, 'ruby-foreman-scap-client') }}
   when: ansible_os_family == "Debian"
 
 - name: Set facts for rpm-based OS
   ansible.builtin.set_fact:
     package_name: >-
       {{ (foreman_scap_client_package | length > 0)
-      | ternary(foreman_scap_client_package,'rubygem-foreman_scap_client') }}
+      | ternary(foreman_scap_client_package, 'rubygem-foreman_scap_client') }}
   when: ansible_os_family == "RedHat" or ansible_os_family == "Suse"
 
 - name: Collect bootc status
-  shell:
-    cmd: 'bootc status --json'
+  ansible.builtin.command:
+    cmd: bootc status --json
   register: bootc_status
   ignore_errors: true
+  changed_when: false
   when: ansible_os_family == "RedHat"
 
 - name: Parse bootc status json
-  set_fact:
+  ansible.builtin.set_fact:
     bootc_status_json: "{{ bootc_status.stdout | from_json }}"
-  when: 
+  when:
     - bootc_status.rc == 0
     - bootc_status.stdout | length > 0
 
 - name: Determine host is a bootc host
-  set_fact:
+  ansible.builtin.set_fact:
     is_bootc_host: "{{ bootc_status_json is defined and bootc_status_json['status']['booted'] | trim != 'None' }}"
   when: ansible_os_family == "RedHat"
 
 - name: Install the foreman_scap_client package via dnf --transient (bootc hosts)
-  shell:
-    cmd: "dnf --transient install -y {{ package_name }}"
+  ansible.builtin.command:
+    cmd: dnf --transient install -y {{ package_name }}
   when:
     - is_bootc_host is defined and is_bootc_host
     - ansible_os_family == "RedHat"
+  changed_when: true
 
 - name: Install the foreman_scap_client package (non-bootc hosts)
-  package:
+  ansible.builtin.package:
     name: "{{ package_name }}"
     state: "{{ foreman_scap_client_state }}"
   when: is_bootc_host is not defined or not is_bootc_host

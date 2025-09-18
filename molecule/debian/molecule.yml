@@ -2,13 +2,11 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: podman
 platforms:
-  - name: debian10
-    image: geerlingguy/docker-${MOLECULE_DISTRO:-debian10}-ansible:latest
+  - name: debian13
+    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-debian13}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
 provisioner:
@@ -17,5 +15,4 @@ scenario:
   name: debian
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+lint: flake8

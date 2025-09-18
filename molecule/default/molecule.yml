@@ -2,10 +2,10 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: podman
 platforms:
   - name: instance
-    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
+    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-centos8}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     privileged: true
     pre_build_image: true
@@ -15,5 +15,4 @@ scenario:
   name: default
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+lint: flake8

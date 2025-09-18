@@ -9,7 +9,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_foreman_scap_client_package(host):
-    assert host.package('rubygem-foreman_scap_client.noarch').is_installed
+    assert host.package('foreman_scap_client_bash.noarch').is_installed
 
 
 def test_foreman_scap_client_config(host):
