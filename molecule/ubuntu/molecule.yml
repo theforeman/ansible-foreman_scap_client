@@ -4,8 +4,8 @@ dependency:
 driver:
   name: podman
 platforms:
-  - name: ubuntu20
-    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest
+  - name: ubuntu24
+    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2404}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     privileged: true
     pre_build_image: true

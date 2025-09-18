@@ -4,8 +4,8 @@ dependency:
 driver:
   name: podman
 platforms:
-  - name: debian10
-    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-debian10}-ansible:latest
+  - name: debian13
+    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-debian13}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     privileged: true
     pre_build_image: true
