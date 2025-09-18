@@ -2,13 +2,11 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: podman
 platforms:
   - name: ubuntu20
-    image: geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest
+    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
 provisioner:

@@ -42,15 +42,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [centos7, centos8, ubuntu2004, debian10]
+        distro: [centos8, ubuntu2404, debian13]
         include:
-          - distro: centos7
-            command: molecule test
           - distro: centos8
             command: molecule test
-          - distro: ubuntu2004
+          - distro: ubuntu2404
             command: molecule test -s ubuntu
-          - distro: debian10
+          - distro: debian13
             command: molecule test -s debian
 
     steps:
@@ -58,6 +56,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: 'theforeman.foreman_scap_client'
+
+      - uses: gacts/install-podman@v1
 
       - name: Set up Python 3.
         uses: actions/setup-python@v2

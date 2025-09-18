@@ -2,10 +2,10 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: podman
 platforms:
   - name: instance
-    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
+    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     privileged: true
     pre_build_image: true
