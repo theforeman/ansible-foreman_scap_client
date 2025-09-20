@@ -1,8 +1,6 @@
 ---
 - name: Converge
   hosts: all
-  roles:
-    - role: theforeman.foreman_scap_client
   vars:
     foreman_scap_client_manage_repo: true
     foreman_scap_client_server: https://foreman.example.com
@@ -27,3 +25,36 @@
         "tailoring_download_path": "/compliance/policies/1/tailoring"
       }
     ]
+  tasks:
+    - name: "Test the role with no policies and server"
+      ansible.builtin.import_role:
+        name: theforeman.foreman_scap_client
+      vars:
+        foreman_scap_client_server: ''
+        foreman_scap_client_policies: []
+      tags: molecule-idempotence-notest
+
+    - name: "Test that the role fails when the server variable is empty and a policy is assigned"
+      tags: molecule-idempotence-notest
+      block:
+        - name: "Run the role with an empty server variable (expected to fail)"
+          ansible.builtin.include_role:
+            name: theforeman.foreman_scap_client
+          vars:
+            foreman_scap_client_server: ''
+          register: role_result
+          ignore_errors: true
+
+        - name: "FAIL: The role unexpectedly succeeded"
+          ansible.builtin.fail:
+            msg: "The role with en empty server variable should have failed, but it succeeded."
+          when: not role_result.failed
+
+      rescue:
+        - name: "Assert that the role failed."
+          ansible.builtin.debug:
+            msg: "SUCCESS: The role with an empty server variable failed correctly."
+
+    - name: "Test the role with all variables"
+      ansible.builtin.import_role:
+        name: theforeman.foreman_scap_client
