@@ -1,5 +1,12 @@
 ---
-- name: Ensure that the host has an OpenSCAP proxy assigned.
+- name: Ensure that there are OpenSCAP policies assigned to the host
+  ansible.builtin.assert:
+    that: foreman_scap_client_policies is defined and foreman_scap_client_policies | length != 0
+    fail_msg: "No OpenSCAP policies are assigned to the host.
+      Please assign at least one OpenSCAP policy before continuing."
+    success_msg: "At least one OpenSCAP policy is assigned to the host."
+
+- name: Ensure that the host has an OpenSCAP proxy assigned
   ansible.builtin.assert:
     that: foreman_scap_client_server != ''
     fail_msg: "The host does not have an OpenSCAP proxy assigned. Please assign an OpenSCAP proxy before continuing."
