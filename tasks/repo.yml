@@ -1,4 +1,14 @@
 ---
+- name: Include OS specific repository configuration variables
+  ansible.builtin.include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+    - '{{ ansible_distribution }}.yml'
+    - '{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml'
+    - '{{ ansible_os_family }}.yml'
+  when:
+    - foreman_scap_client_repo_url is not defined
+
 - name: Configure client repository (yum)
   ansible.builtin.yum_repository:
     name: "foreman-plugins-{{ foreman_scap_client_release }}"
@@ -27,13 +37,14 @@
   block:
     - name: Configure gpg_key for client repository (apt)
       ansible.builtin.get_url:
-        url: "{{ foreman_scap_client_apt_key_url }}"
-        dest: "{{ foreman_scap_client_repo_key }}"
+        url: "{{ foreman_scap_client_repo_key }}"
+        dest: "{{ foreman_scap_client_repo_key_filepath }}"
         mode: '0644'
 
     - name: Configure client repository (apt)
       ansible.builtin.apt_repository:
-        repo: "deb [signed-by={{ foreman_scap_client_repo_key }}] {{ foreman_scap_client_apt_repo_url }} stable main"
+        repo: >-
+          "deb [signed-by={{ foreman_scap_client_repo_key_filepath }}] {{ foreman_scap_client_repo_url }} stable main"
         state: "{{ foreman_scap_client_repo_state }}"
 
 - name: Configure client repository (apt) - debian.sources format
@@ -48,19 +59,19 @@
 
     - name: Configure gpg_key for client repository (apt)
       ansible.builtin.get_url:
-        url: "{{ foreman_scap_client_apt_key_url }}"
-        dest: "{{ foreman_scap_client_repo_key }}"
+        url: "{{ foreman_scap_client_repo_key }}"
+        dest: "{{ foreman_scap_client_repo_key_filepath }}"
         mode: '0644'
 
     - name: Configure client repository (apt)
       ansible.builtin.deb822_repository:
         name: "foreman_client"
         types: "deb"
-        uris: "{{ foreman_scap_client_apt_repo_url }}"
+        uris: "{{ foreman_scap_client_repo_url }}"
         suites: "stable"
         components: "main"
         state: "{{ foreman_scap_client_repo_state }}"
-        signed_by: "{{ foreman_scap_client_repo_key }}"
+        signed_by: "{{ foreman_scap_client_repo_key_filepath }}"
 
 - name: Run apt-get update
   ansible.builtin.apt:

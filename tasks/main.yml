@@ -5,14 +5,6 @@
     fail_msg: "The host does not have an OpenSCAP proxy assigned. Please assign an OpenSCAP proxy before continuing."
     success_msg: "The assigned OpenSCAP proxy is {{ foreman_scap_client_server }}."
 
-- name: Include OS specific vars
-  ansible.builtin.include_vars: '{{ item }}'
-  with_first_found:
-    - '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
-    - '{{ ansible_distribution }}.yml'
-    - '{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml'
-    - '{{ ansible_os_family }}.yml'
-
 - name: Include tasks to manage the repository of the foreman_scap_client package
   ansible.builtin.include_tasks: repo.yml
   when: foreman_scap_client_manage_repo | bool

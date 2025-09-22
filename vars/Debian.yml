@@ -1,4 +1,6 @@
 ---
-foreman_scap_client_repo_key: /etc/apt/trusted.gpg.d/foreman_client.asc
-foreman_scap_client_apt_repo_url: >-
+foreman_scap_client_repo_key: https://oss.atix.de/atix_gpg.pub
+foreman_scap_client_repo_key_filepath: /etc/apt/trusted.gpg.d/foreman_client.asc
+foreman_scap_client_repo_state: present
+foreman_scap_client_repo_url: >-
   https://oss.atix.de/{{ ansible_distribution }}{{ ansible_distribution_major_version }}/

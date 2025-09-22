@@ -1,3 +1,6 @@
 ---
+foreman_scap_client_repo_gpg: false
+foreman_scap_client_repo_key: https://oss.atix.de/atix_gpg.pub
+foreman_scap_client_repo_state: present
 foreman_scap_client_repo_url: >-
   https://oss.atix.de/SLES{{ ansible_distribution_major_version }}SP{{ ansible_distribution_release }}
