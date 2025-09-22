@@ -22,10 +22,9 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_release': Which release to configure a repo for
 * 'foreman_scap_client_manage_repo': Manage the foreman_scap_client repository or expect the package to be available (default: false)
 * 'foreman_scap_client_repo_url': URL for the repository with rubygem-foreman_scap_client
-* 'foreman_scap_client_apt_repo_url: Debian-based repository providing the scap-client & subscription-manager
 * 'foreman_scap_client_repo_state': state of the repository
-* 'foreman_scap_client_repo_key': RPM Key source file for foreman-plugins repo. Note: Currently, packages are not signed.
-  Unless set to an alternative file source, URL will be used.
+* 'foreman_scap_client_repo_key': GPG Key source file for foreman-plugins repo. Unless set to an alternative file source, URL will be used.
+* 'foreman_scap_client_repo_key_filepath': Target file path for the GPG Key on Debian / Ubuntu systems. Not used at other OSses.
 * 'foreman_scap_client_repo_gpg': Enable / disable GPG checks
 * 'foreman_scap_client_cron_template': path to the cron template
 * 'foreman_scap_client_cron_splay_seed': seed for cron task splay time to generate random but idempotent numbers
@@ -34,6 +33,11 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_http_proxy_server': HTTP proxy server
 * 'foreman_scap_client_http_proxy_port': HTTP proxy port
 * 'foreman_scap_client_ciphers': Optional list of ciphers for connection negotiation. Example: ["AES256-SHA:AES128-SHA:DES-CBC3-SHA"]
+
+If `foreman_scap_client_manage_repo` is true, the role will set up the repository for foreman_scap_client. 
+For this, by default the vars/OS-family.yml files are used.
+If `foreman_scap_client_repo_url` variable is set in the playbook, the vars/OS-family.yml file is ignored. 
+In this case, all necesary variables need to be set in the playbook - see vars/OS-family.yml for reference.
 
 ### Sample Usage
 
