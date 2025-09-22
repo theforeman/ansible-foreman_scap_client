@@ -1,20 +1,10 @@
 ---
 - name: Converge
   hosts: all
-  pre_tasks:
-    - name: 'Install cronie'
-      ansible.builtin.yum:
-        name: cronie
-        state: present
-    - name: 'Install subscription-manager'
-      ansible.builtin.yum:
-        name: subscription-manager
-        state: present
   roles:
     - role: theforeman.foreman_scap_client
   vars:
     foreman_scap_client_manage_repo: true
-    foreman_scap_client_repo_state: present
     foreman_scap_client_server: https://foreman.example.com
     foreman_scap_client_port: 9090
     foreman_scap_client_cron_splay_seed: 42

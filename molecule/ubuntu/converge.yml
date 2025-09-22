@@ -1,45 +1,10 @@
 ---
 - name: Converge
   hosts: all
-  pre_tasks:
-    - name: 'Install dependencies'
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-        update_cache: true
-      with_items:
-        - systemd-cron
-        - python3-debian
-        - gnupg
-
-    - name: Configure gpg_key for client repository (apt)
-      ansible.builtin.get_url:
-        url: "https://oss.atix.de/atix_gpg.pub"
-        dest: "/etc/apt/trusted.gpg.d/foreman_client.asc"
-        mode: '0644'
-
-    - name: Configure client repository (apt)
-      ansible.builtin.deb822_repository:
-        name: "foreman_client"
-        types: "deb"
-        uris: "https://oss.atix.de/Ubuntu24LTS/"
-        suites: "stable"
-        components: "main"
-        state: "present"
-        signed_by: "/etc/apt/trusted.gpg.d/foreman_client.asc"
-
-    - name: Run apt-get update
-      ansible.builtin.apt:
-        update_cache: true
-
-    - name: 'Install subscription-manager'
-      ansible.builtin.package:
-        name: subscription-manager
-        state: present
   roles:
     - role: theforeman.foreman_scap_client
   vars:
-    foreman_scap_client_repo_state: present
+    foreman_scap_client_manage_repo: true
     foreman_scap_client_server: https://foreman.example.com
     foreman_scap_client_port: 9090
     foreman_scap_client_cron_splay_seed: 42
