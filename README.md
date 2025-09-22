@@ -20,6 +20,7 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_host_cert_path': path to host certificate, may be puppet agent certificate or katello certificate
 * 'foreman_scap_client_host_private_key_path': path to host private key, may be puppet agent private key or katello private key
 * 'foreman_scap_client_release': Which release to configure a repo for
+* 'foreman_scap_client_manage_repo': Manage the foreman_scap_client repository or expect the package to be available (default: false)
 * 'foreman_scap_client_repo_url': URL for the repository with rubygem-foreman_scap_client
 * 'foreman_scap_client_apt_repo_url: Debian-based repository providing the scap-client & subscription-manager
 * 'foreman_scap_client_repo_state': state of the repository
