@@ -1,0 +1,46 @@
+---
+- name: Converge
+  hosts: all
+  pre_tasks:
+    - name: 'Install dependencies'
+      ansible.builtin.package:
+        name: cronie
+        state: present
+    - name: Configure plugins repository (zypper)
+      community.general.zypper_repository:
+        name: "foreman_client"
+        description: "Foreman plugins repository"
+        repo: "https://oss.atix.de/SLES15SP7/"
+        state: "present"
+        disable_gpg_check: 'true'
+    - name: 'Install subscription-manager'
+      ansible.builtin.package:
+        name: subscription-manager
+        state: present
+  roles:
+    - role: theforeman.foreman_scap_client
+  vars:
+    foreman_scap_client_manage_repo: true
+    foreman_scap_client_repo_state: present
+    foreman_scap_client_server: https://foreman.example.com
+    foreman_scap_client_port: 9090
+    foreman_scap_client_cron_splay_seed: 42
+    foreman_scap_client_http_proxy_server: 'https://proxy.example.com'
+    foreman_scap_client_http_proxy_port: 7475
+    foreman_scap_client_fetch_remote_resources: true
+    foreman_scap_client_timeout: 61
+    foreman_scap_client_policies: [
+      {
+        "id": "1",
+        "hour": "12",
+        "minute": "1",
+        "month": "*",
+        "monthday": "*",
+        "weekday": "1",
+        "profile_id": "",
+        "content_path": "/usr/share/xml/scap/ssg/fedora/ssg-fedora-ds.xml",
+        "download_path": "/compliance/policies/1/content",
+        "tailoring_path": "/var/lib/openscap/ssg-fedora-ds-tailored.xml",
+        "tailoring_download_path": "/compliance/policies/1/tailoring"
+      }
+    ]

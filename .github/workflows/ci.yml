@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro: [centos8, ubuntu2404, debian13]
+        distro: [centos8, ubuntu2404, debian13, opensuseleap15]
         include:
           - distro: centos8
             command: molecule test
@@ -51,6 +51,8 @@ jobs:
             command: molecule test -s ubuntu
           - distro: debian13
             command: molecule test -s debian
+          - distro: opensuseleap15
+            command: molecule test -s opensuse
 
     steps:
       - name: Check out the codebase.
