@@ -23,7 +23,7 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_manage_repo': Manage the foreman_scap_client repository or expect the package to be available (default: false)
 * 'foreman_scap_client_repo_url': URL for the repository with rubygem-foreman_scap_client
 * 'foreman_scap_client_repo_state': state of the repository
-* 'foreman_scap_client_repo_key': GPG Key source file for foreman-plugins repo. Unless set to an alternative file source, URL will be used.
+* 'foreman_scap_client_repo_key': GPG Key source file for foreman-plugins repo.
 * 'foreman_scap_client_repo_key_filepath': Target file path for the GPG Key on Debian / Ubuntu systems. Not used at other OSses.
 * 'foreman_scap_client_repo_gpg': Enable / disable GPG checks
 * 'foreman_scap_client_cron_template': path to the cron template

@@ -1,27 +1,10 @@
 ---
 - name: Converge
   hosts: all
-  pre_tasks:
-    - name: 'Install dependencies'
-      ansible.builtin.package:
-        name: cronie
-        state: present
-    - name: Configure plugins repository (zypper)
-      community.general.zypper_repository:
-        name: "foreman_client"
-        description: "Foreman plugins repository"
-        repo: "https://oss.atix.de/SLES15SP7/"
-        state: "present"
-        disable_gpg_check: 'true'
-    - name: 'Install subscription-manager'
-      ansible.builtin.package:
-        name: subscription-manager
-        state: present
   roles:
     - role: theforeman.foreman_scap_client
   vars:
     foreman_scap_client_manage_repo: true
-    foreman_scap_client_repo_state: present
     foreman_scap_client_server: https://foreman.example.com
     foreman_scap_client_port: 9090
     foreman_scap_client_cron_splay_seed: 42

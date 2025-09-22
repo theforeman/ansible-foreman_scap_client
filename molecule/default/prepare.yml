@@ -1,0 +1,12 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: 'Install cronie'
+      ansible.builtin.dnf:
+        name: cronie
+        state: present
+    - name: 'Install subscription-manager'
+      ansible.builtin.dnf:
+        name: subscription-manager
+        state: present
