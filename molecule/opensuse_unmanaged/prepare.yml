@@ -1,0 +1,20 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: 'Install dependencies'
+      ansible.builtin.package:
+        name: cronie
+        state: present
+
+    - name: Configure repository
+      community.general.zypper_repository:
+        name: "foreman_client"
+        repo: "https://oss.atix.de/SLES15SP7/"
+        state: "present"
+        disable_gpg_check: 'true'
+
+    - name: 'Install subscription-manager'
+      ansible.builtin.package:
+        name: subscription-manager
+        state: present
