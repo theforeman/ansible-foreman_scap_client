@@ -1,0 +1,18 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: podman
+platforms:
+  - name: opensuseleap15
+    image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-opensuseleap15}-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+scenario:
+  name: opensuse_unmanaged
+verifier:
+  name: testinfra
+lint: flake8

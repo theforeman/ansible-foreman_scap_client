@@ -43,16 +43,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro: [centos8, ubuntu2404, debian13, opensuseleap15]
+        scenario: [centos, ubuntu, debian, debian_unmanaged, opensuse, opensuse_unmanaged]
         include:
-          - distro: centos8
+          - scenario: centos
+            distro: centos8
             command: molecule test
-          - distro: ubuntu2404
+          - scenario: ubuntu
+            distro: ubuntu2404
             command: molecule test -s ubuntu
-          - distro: debian13
+          - scenario: debian
+            distro: debian13
             command: molecule test -s debian
-          - distro: opensuseleap15
+          - scenario: debian_unmanaged
+            distro: debian13
+            command: molecule test -s debian_unmanaged
+          - scenario: opensuse
+            distro: opensuseleap15
             command: molecule test -s opensuse
+          - scenario: opensuse_unmanaged
+            distro: opensuseleap15
+            command: molecule test -s opensuse_unmanaged
 
     steps:
       - name: Check out the codebase.
