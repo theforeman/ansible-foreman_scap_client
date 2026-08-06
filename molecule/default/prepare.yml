@@ -10,3 +10,8 @@
       ansible.builtin.dnf:
         name: subscription-manager
         state: present
+
+    - name: Clean dnf package cache
+      ansible.builtin.command:
+        cmd: dnf clean all
+      changed_when: true

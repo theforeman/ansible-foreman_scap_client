@@ -55,6 +55,7 @@
   ansible.builtin.package:
     name: "{{ package_name }}"
     state: "{{ foreman_scap_client_state }}"
+    update_cache: "{{ true if ansible_os_family == 'Debian' else omit }}"
   when: is_bootc_host is not defined or not is_bootc_host
 
 - name: Get certificate paths
