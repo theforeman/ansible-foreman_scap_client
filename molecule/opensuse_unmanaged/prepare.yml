@@ -18,3 +18,8 @@
       ansible.builtin.package:
         name: subscription-manager
         state: present
+
+    - name: Clean zypper package cache
+      ansible.builtin.command:
+        cmd: zypper clean --all
+      changed_when: true
