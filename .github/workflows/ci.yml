@@ -83,6 +83,18 @@ jobs:
       - name: Install ansible dependencies
         run: ansible-galaxy collection install community.general
 
+      - name: Diagnose container startup
+        continue-on-error: true
+        run: |
+          image="docker.io/geerlingguy/docker-${{ matrix.distro }}-ansible:latest"
+          container="molecule-diagnostic"
+          trap 'podman rm -f "$container"' EXIT
+          podman run --detach --privileged --name "$container" "$image"
+          sleep 10
+          podman inspect --format 'status={{.State.Status}} exit={{.State.ExitCode}} error={{.State.Error}}' "$container"
+          podman logs "$container"
+          podman exec "$container" sh -c 'id; ls -ld /tmp /root; umask 77 && mkdir -pv /tmp/.ansible/tmp'
+
       - name: Run Molecule tests.
         run: ${{ matrix.command }}
         env:
