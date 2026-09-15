@@ -7,6 +7,7 @@ platforms:
   - name: ubuntu24
     image: docker.io/geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2404}-ansible:latest
     command: ${MOLECULE_DOCKER_COMMAND:-""}
+    override_command: false
     privileged: true
     pre_build_image: true
 provisioner:
