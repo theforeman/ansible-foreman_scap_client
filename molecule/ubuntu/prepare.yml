@@ -37,6 +37,19 @@
         name: subscription-manager
         state: present
 
+    - name: Remove apt package lists
+      ansible.builtin.file:
+        path: /var/lib/apt/lists
+        state: absent
+
+    - name: Recreate apt package lists directory
+      ansible.builtin.file:
+        path: /var/lib/apt/lists
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
     - name: Cleanup repo
       ansible.builtin.deb822_repository:
         name: "foreman_client"
