@@ -2,6 +2,6 @@ ansible-core==2.16.0
 ansible-lint==25.1.3
 molecule-plugins[podman]==25.8.12
 molecule==25.9.0
-pytest==8.4.2
+pytest==9.0.3
 testinfra==6.0.0
 yamllint==1.37.1
