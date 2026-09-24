@@ -6,5 +6,5 @@
 
 # foreman_scap_client cron job
 {% for policy in foreman_scap_client_policies %}
-{{ policy['minute'] }} {{ policy['hour'] }} {{ policy['monthday'] }} {{ policy['month'] }} {{ policy['weekday'] }} root /bin/sleep {{ foreman_scap_client_cron_splay | random(seed = foreman_scap_client_cron_splay_seed) if foreman_scap_client_cron_splay_seed != '' else foreman_scap_client_cron_splay | random }}; /usr/bin/foreman_scap_client ds {{ policy['id'] }} 2>&1 | logger -t foreman_scap_client
+{{ policy['minute'] }} {{ policy['hour'] }} {{ policy['monthday'] }} {{ policy['month'] }} {{ policy['weekday'] }} root /bin/sleep {{ foreman_scap_client_cron_splay | random(seed = foreman_scap_client_cron_splay_seed) if foreman_scap_client_cron_splay_seed != '' else foreman_scap_client_cron_splay | random }}; {% if foreman_scap_client_oscap_probe_ignore_paths %}OSCAP_PROBE_IGNORE_PATHS="{{ foreman_scap_client_oscap_probe_ignore_paths }}" {% endif %}{% if foreman_scap_client_oscap_probe_memory_usage_ratio %}OSCAP_PROBE_MEMORY_USAGE_RATIO="{{ foreman_scap_client_oscap_probe_memory_usage_ratio }}" {% endif %}/usr/bin/foreman_scap_client ds {{ policy['id'] }} 2>&1 | logger -t foreman_scap_client
 {% endfor %}

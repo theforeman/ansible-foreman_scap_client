@@ -33,6 +33,8 @@ of foreman_scap_client and create a cron which schedules the client execution.
 * 'foreman_scap_client_http_proxy_server': HTTP proxy server
 * 'foreman_scap_client_http_proxy_port': HTTP proxy port
 * 'foreman_scap_client_ciphers': Optional list of ciphers for connection negotiation. Example: ["AES256-SHA:AES128-SHA:DES-CBC3-SHA"]
+* 'foreman_scap_client_oscap_probe_ignore_paths': Skip given paths during evaluation. If multiple paths should be skipped they need to be separated by a colon. The paths should be absolute canonical paths.
+* 'foreman_scap_client_oscap_probe_memory_usage_ratio': maximum memory usage ratio (used/total) for OpenSCAP probes, default: 0.1
 
 If `foreman_scap_client_manage_repo` is true, the role will set up the repository for foreman_scap_client. 
 For this, by default the vars/OS-family.yml files are used.

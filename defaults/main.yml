@@ -22,3 +22,5 @@ foreman_scap_client_http_proxy_server: ''
 foreman_scap_client_http_proxy_port: ''
 foreman_scap_client_timeout: 60
 foreman_scap_client_ciphers: []
+foreman_scap_client_oscap_probe_ignore_paths: ''
+foreman_scap_client_oscap_probe_memory_usage_ratio: '0.1'
